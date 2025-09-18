@@ -96,5 +96,53 @@ namespace ProWalks.API.Controllers
 
             return CreatedAtAction(nameof(GetRegionById), new {id = regionDto.Id}, regionDto);
         }
+
+
+        [HttpPut]
+        [Route("{id:Guid}")]
+        public IActionResult Update([FromRoute] Guid id, [FromBody] UpdateRegionDto updateRegionDto) {
+            var region = _dbContext.Regions.FirstOrDefault(x => x.Id == id);
+
+            if (region == null)
+            {
+                return NotFound();
+            }
+
+            //map dto to domain
+            region.Code = updateRegionDto.Code;
+            region.Name = updateRegionDto.Name;
+            region.ImageUrl = updateRegionDto.ImageUrl;
+            region.Country = updateRegionDto.Country;
+
+            _dbContext.SaveChanges();
+
+            //map domain to dto
+            var regtionDto = new RegionDto
+            {
+                Id = region.Id,
+                Name = region.Name,
+                Code = region.Code,
+                ImageUrl = region.ImageUrl,
+                Country = region.Country
+            };
+
+            return Ok(regtionDto);
+        }
+
+
+        [HttpDelete]
+        [Route("{id:Guid}")]
+        public IActionResult Delete([FromRoute] Guid id)
+        {
+            var region = _dbContext.Regions.FirstOrDefault(x => x.Id == id);
+
+            if (region == null) { 
+                return NotFound();
+            }
+
+            _dbContext.Regions.Remove(region);
+            _dbContext.SaveChanges();
+            return Ok();
+        }
     }
 }
