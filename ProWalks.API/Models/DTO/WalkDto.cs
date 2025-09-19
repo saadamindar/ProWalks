@@ -1,6 +1,8 @@
-﻿namespace ProWalks.API.Models.Domain
+﻿using ProWalks.API.Models.Domain;
+
+namespace ProWalks.API.Models.DTO
 {
-    public class Walk
+    public class WalkDto
     {
         public Guid Id { get; set; }
         public string Name { get; set; }
@@ -11,15 +13,11 @@
         public DateTime CreatedDate { get; set; } = DateTime.UtcNow;
         public DateTime UpdatedDate { get; set; } = DateTime.UtcNow;
         public bool IsActive { get; set; } = false;
-
-
         public Guid DifficultyId { get; set; }
         public Guid RegionId { get; set; }
 
         //Navigation
-        public Difficulty Difficulty { get; set; }
-        public Region Region { get; set; }
-
-
+        public DifficultyDto Difficulty { get; set; }
+        public RegionDto Region { get; set; }
     }
 }

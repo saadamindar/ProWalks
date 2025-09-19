@@ -1,25 +1,22 @@
-﻿namespace ProWalks.API.Models.Domain
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace ProWalks.API.Models.DTO
 {
-    public class Walk
+    public class CreateWalkDto
     {
-        public Guid Id { get; set; }
+        [Required]
         public string Name { get; set; }
+        [Required]
         public string Description { get; set; }
+        [Required]
         public double LengthInKm { get; set; }
         public string? ImageUrl { get; set; }
+        [Required]
         public int Rating { get; set; }
         public DateTime CreatedDate { get; set; } = DateTime.UtcNow;
         public DateTime UpdatedDate { get; set; } = DateTime.UtcNow;
-        public bool IsActive { get; set; } = false;
-
-
+        public bool IsActive { get; set; }
         public Guid DifficultyId { get; set; }
         public Guid RegionId { get; set; }
-
-        //Navigation
-        public Difficulty Difficulty { get; set; }
-        public Region Region { get; set; }
-
-
     }
 }

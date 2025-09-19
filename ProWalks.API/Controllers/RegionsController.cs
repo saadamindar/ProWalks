@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using ProWalks.API.CustomActionFilters;
 using ProWalks.API.Data;
 using ProWalks.API.Models.Domain;
 using ProWalks.API.Models.DTO;
@@ -72,8 +73,9 @@ namespace ProWalks.API.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create([FromBody] AddRegionDto addRegionDto) {
-
+        [ValidateModelAtribute]
+        public async Task<IActionResult> Create([FromBody] AddRegionDto addRegionDto) 
+        {
             var region = _mapper.Map<Region>(addRegionDto);
 
             region = await _regionRepository.CreateAsync(region);
@@ -86,8 +88,9 @@ namespace ProWalks.API.Controllers
 
         [HttpPut]
         [Route("{id:Guid}")]
-        public async Task<IActionResult> Update([FromRoute] Guid id, [FromBody] UpdateRegionDto updateRegionDto) {
-
+        [ValidateModelAtribute]
+        public async Task<IActionResult> Update([FromRoute] Guid id, [FromBody] UpdateRegionDto updateRegionDto) 
+        {
             //map dto to domain
             var region = _mapper.Map<Region>(updateRegionDto);
 
