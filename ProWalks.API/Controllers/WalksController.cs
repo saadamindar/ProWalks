@@ -37,9 +37,9 @@ namespace ProWalks.API.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAll([FromQuery] string? filterOn, [FromQuery] string? filterQuery, [FromQuery] string? sortBy, [FromQuery] bool? isAscending)
+        public async Task<IActionResult> GetAll([FromQuery] string? filterOn, [FromQuery] string? filterQuery, [FromQuery] string? sortBy, [FromQuery] bool? isAscending, [FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 3)
         {
-            var walks = await walkRepository.GetAllAsync(filterOn, filterQuery, sortBy, isAscending);
+            var walks = await walkRepository.GetAllAsync(filterOn, filterQuery, sortBy, isAscending, pageNumber, pageSize);
             var walksDto = mapper.Map<List<WalkDto>>(walks);
             return Ok(walksDto);
         }
