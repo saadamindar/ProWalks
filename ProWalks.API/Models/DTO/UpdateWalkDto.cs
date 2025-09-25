@@ -14,8 +14,8 @@ namespace ProWalks.API.Models.DTO
         public string? ImageUrl { get; set; }
         [Required]
         public int Rating { get; set; }
-        public DateTime CreatedDate { get; set; } = DateTime.UtcNow;
-        public DateTime UpdatedDate { get; set; } = DateTime.UtcNow;
+        public DateTime CreatedDate { get; set; } 
+        public DateTime UpdatedDate { get; set; }
         public bool IsActive { get; set; } = false;
 
         public Guid DifficultyId { get; set; }
