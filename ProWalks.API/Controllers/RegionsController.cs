@@ -13,7 +13,6 @@ namespace ProWalks.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize]
     public class RegionsController : ControllerBase
     {
         private readonly AppDbContext _dbContext;
@@ -28,6 +27,7 @@ namespace ProWalks.API.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = "user")]
         public async Task<IActionResult> GetAll()
         {
 
@@ -57,6 +57,7 @@ namespace ProWalks.API.Controllers
 
         [HttpGet]
         [Route("{id:Guid}")]
+        [Authorize(Roles = "user")]
         public async Task<IActionResult> GetRegionById(Guid id) 
         {
             //var region = _dbContext.Regions.Find(id);
@@ -76,6 +77,7 @@ namespace ProWalks.API.Controllers
 
         [HttpPost]
         [ValidateModelAtribute]
+        [Authorize(Roles = "admin")]
         public async Task<IActionResult> Create([FromBody] AddRegionDto addRegionDto) 
         {
             var region = _mapper.Map<Region>(addRegionDto);
@@ -91,6 +93,7 @@ namespace ProWalks.API.Controllers
         [HttpPut]
         [Route("{id:Guid}")]
         [ValidateModelAtribute]
+        [Authorize(Roles = "admin, user")]
         public async Task<IActionResult> Update([FromRoute] Guid id, [FromBody] UpdateRegionDto updateRegionDto) 
         {
             //map dto to domain
@@ -107,6 +110,7 @@ namespace ProWalks.API.Controllers
 
         [HttpDelete]
         [Route("{id:Guid}")]
+        [Authorize(Roles = "admin")]
         public async Task<IActionResult> Delete([FromRoute] Guid id)
         {
             var region = await _regionRepository.DeleteAsync(id);

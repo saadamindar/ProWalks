@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using ProWalks.API.Models.DTO;
+using ProWalks.API.Repositories;
 using System.Runtime.CompilerServices;
 
 namespace ProWalks.API.Controllers
@@ -10,12 +11,14 @@ namespace ProWalks.API.Controllers
     [ApiController]
     public class AuthController : ControllerBase
     {
-        public AuthController(UserManager<IdentityUser> userManager)
+        public AuthController(UserManager<IdentityUser> userManager, ITokenRepository tokenRepository)
         {
             _userManager = userManager;
+            TokenRepository = tokenRepository;
         }
 
         public UserManager<IdentityUser> _userManager { get; }
+        public ITokenRepository TokenRepository { get; }
 
         [HttpPost]
         [Route("Register")]
@@ -49,15 +52,28 @@ namespace ProWalks.API.Controllers
 
             if (user != null)
             { 
+
                 var checkPassword = await _userManager.CheckPasswordAsync(user, loginUserDto.Password);
                 if (checkPassword)
                 {
-                    //Create JWT Token
-                    return Ok("User logged in successfully");
+                    // get roles for this user
+                    var roles = await _userManager.GetRolesAsync(user);
+
+                    if (roles != null)
+                    {
+                        //Create JWT Token
+                        var jwtToken = TokenRepository.CreateJwtToken(user, roles.ToList());
+
+                        var response = new LoginResponseDto
+                        {
+                            JwtToken = jwtToken
+                        };
+                        return Ok(response);
+                    }
                 }
             }
 
-            return Unauthorized();
+            return Unauthorized("Username or Password is incorrect");
         }
     }
 }
